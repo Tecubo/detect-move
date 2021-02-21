@@ -1,0 +1,12 @@
+#content {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#move {
+    font-family: sans-serif;
+    font-size: 40px;
+}
