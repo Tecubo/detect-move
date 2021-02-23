@@ -1,47 +1,79 @@
 let move = document.getElementById('move')
+let content = document.getElementById('content')
+let posiniX, posiniY, posfinX, posfinY, resX, resY
+let contentX = content.offsetWidth
+let contentY = content.offsetHeight
+let abs = (nb) => {return nb < 0 ? -nb : nb}
+let up = () => {move.innerText = 'up'}
+let down = () => {move.innerText = 'down'}
+let right = () => {move.innerText = 'right'}
+let left = () => {move.innerText = 'left'}
 
-let posiniX = 0
-let posiniY = 0
-
-let posfinX = 0
-let posfinY = 0
-
-function moveMouse (e) {
-}
-
-function abs (nb) {
-    if (nb < 0) {
-        return -nb
-    }
-    return nb
-}
-
-document.addEventListener('mousedown', (edown) => {
-    posiniX = edown.pageX
-    posiniY = edown.pageY
-    document.addEventListener('mousemove', moveMouse)
+window.addEventListener('resize', () => {
+    contentX = content.offsetWidth
+    contentY = content.offsetHeight
 })
 
-document.addEventListener('mouseup', (eup) => {
-    posfinX = eup.pageX
-    posfinY = eup.pageY
-    document.removeEventListener('mousemove', moveMouse)
-    let resX = posfinX - posiniX
-    let resY = posfinY - posiniY
+window.addEventListener('keydown', e => {
+    k = e.keyCode
+    if (k < 41 && k > 36) {
+        e.preventDefault()
+        switch (k) {
+            case 37:
+                left()
+                break
+            case 38:
+                up()
+                break
+            case 39:
+                right()
+                break
+            case 40:
+                down()
+                break
+        }
+    }
+})
+
+content.addEventListener('mousedown', e => {
+    posiniX = e.offsetX
+    posiniY = e.offsetY
+})
+
+content.addEventListener('mouseup', e => {
+    posfinX = e.offsetX
+    posfinY = e.offsetY
+    resX = posfinX - posiniX
+    resY = posfinY - posiniY
     
     if (resX == 0 && resY == 0) {
-        move.innerText = 'click'
+        let coeffdir = contentY / contentX
+        let diag1 = -coeffdir * posfinX + contentY > posfinY
+        let diag2 = coeffdir * posfinX > posfinY
+        if (diag1) {
+            if (diag2) {
+                up()
+            } else if (!diag2) {
+                left()
+            }
+        } else if (!diag1) {
+            if (diag2) {
+                right()
+            } else if (!diag2) {
+                down()
+            }
+        }
     } else if (abs(resX) >= abs(resY)) {
         if (resX < 0) {
-            move.innerText = 'left'
+            left()
         } else if (resX >= 0) {
-            move.innerText = 'right'
+            right()
         }
     } else if (abs(resX) < abs(resY)) {
         if (resY < 0) {
-            move.innerText = 'up'
+            up()
         } else if (resY >= 0) {
-            move.innerText = 'down'
+            down()
         }
     }
 })
