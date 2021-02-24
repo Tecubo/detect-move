@@ -11,12 +11,12 @@ let leftkey = 37
 let upkey = 38
 let rightkey = 39
 let downkey = 40
-let abs = (nb) => {return nb < 0 ? -nb : nb}
-let up = () => {move.innerText = 'up'}
-let down = () => {move.innerText = 'down'}
-let right = () => {move.innerText = 'right'}
-let left = () => {move.innerText = 'left'}
-let stopPropagation = (e) => {e.stopPropagation()}
+let abs = (nb) => { return nb < 0 ? -nb : nb }
+let up = () => { move.innerText = 'up' }
+let down = () => { move.innerText = 'down' }
+let right = () => { move.innerText = 'right' }
+let left = () => { move.innerText = 'left' }
+let stopPropagation = (e) => { e.stopPropagation() }
 let paramsVisibility = false
 
 window.addEventListener('resize', () => {
@@ -52,40 +52,33 @@ let clickMoveDown = (e) => {
 }
 
 let clickMoveUp = (e) => {
-    posfinX = e.offsetX
-    posfinY = e.offsetY
-    resX = posfinX - posiniX
-    resY = posfinY - posiniY
-    
-    if (resX == 0 && resY == 0) {
-        let coeffdir = contentY / contentX
-        let diag1 = -coeffdir * posfinX + contentY > posfinY
-        let diag2 = coeffdir * posfinX > posfinY
-        if (diag1) {
-            if (diag2) {
-                up()
-            } else if (!diag2) {
-                left()
-            }
-        } else if (!diag1) {
-            if (diag2) {
-                right()
-            } else if (!diag2) {
-                down()
-            }
-        }
-    } else if (abs(resX) >= abs(resY)) {
-        if (resX < 0) {
+    x = e.offsetX;
+    y = e.offsetY;
+    dx = x - posiniX;
+    dy = y - posiniY;
+
+    if (dx || dy)
+        get_move(dx, dy);
+    else
+        get_move(x - contentX / 2, y - contentY / 2)
+}
+
+function get_move(x, y) {
+    x *= contentY / contentX;
+
+    if (abs(x) > abs(y)) // axe x
+    {
+        if (x < 0)
             left()
-        } else if (resX >= 0) {
+        else
             right()
-        }
-    } else if (abs(resX) < abs(resY)) {
-        if (resY < 0) {
+    }
+    else // axe y
+    {
+        if (y < 0)
             up()
-        } else if (resY >= 0) {
+        else
             down()
-        }
     }
 }
 
@@ -109,7 +102,7 @@ let showParams = () => {
 
     params_window.addEventListener('click', stopPropagation)
     params.addEventListener('click', hideParams)
-    
+
     for (let i = 0; i < control_buttons.length; i++) {
         let button = control_buttons[i]
         button.addEventListener('click', changeControl)
