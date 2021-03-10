@@ -60,11 +60,11 @@ let clickMoveUp = (e) => {
     if (dx || dy)
         get_move(dx, dy);
     else
+        x *= contentY / contentX;
         get_move(x - contentX / 2, y - contentY / 2)
 }
 
 function get_move(x, y) {
-    x *= contentY / contentX;
 
     if (abs(x) > abs(y)) // axe x
     {
